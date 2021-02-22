@@ -10,7 +10,7 @@ import com.projects.android.mvvmtodo.data.Task
 import com.projects.android.mvvmtodo.databinding.ItemTaskBinding
 
 
-class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback()) {
+class TaskAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskViewHolder(binding)
@@ -21,7 +21,23 @@ class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback())
         holder.bind(currentItem)
     }
 
-    class TaskViewHolder(private val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root) {
+    interface OnItemClickListener {
+        fun onItemClick(task: Task)
+    }
+
+    inner class TaskViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onItemClick(task)
+                    }
+                }
+            }
+        }
+
         fun bind(task: Task) {
             binding.apply {
                 checkBoxCompleted.isChecked = task.completed
@@ -31,10 +47,11 @@ class TaskAdapter: ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback())
 
 
             }
+
         }
     }
 
-    class DiffCallback: DiffUtil.ItemCallback<Task>() {
+    class DiffCallback : DiffUtil.ItemCallback<Task>() {
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
             return oldItem.id == newItem.id
         }

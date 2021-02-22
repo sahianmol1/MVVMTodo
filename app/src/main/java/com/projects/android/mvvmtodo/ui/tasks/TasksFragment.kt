@@ -8,6 +8,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.projects.android.mvvmtodo.R
 import com.projects.android.mvvmtodo.data.Task
@@ -16,13 +17,13 @@ import com.projects.android.mvvmtodo.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TasksFragment: Fragment(R.layout.fragment_tasks) {
+class TasksFragment: Fragment(R.layout.fragment_tasks), TaskAdapter.OnItemClickListener {
     private val viewModel: TaskViewModel by viewModels()
     private lateinit var taskAdapter: TaskAdapter
     lateinit var newList: MutableList<Task>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        taskAdapter = TaskAdapter()
+        taskAdapter = TaskAdapter(this)
 
         val binding = FragmentTasksBinding.bind(view)
 
@@ -31,6 +32,10 @@ class TasksFragment: Fragment(R.layout.fragment_tasks) {
                 layoutManager = LinearLayoutManager(this@TasksFragment.requireContext())
                 setHasFixedSize(true)
                 adapter = taskAdapter
+            }
+            fabAddTask.setOnClickListener {
+                val action = TasksFragmentDirections.actionTaskFragmentToAddEditTaskFragment()
+                findNavController().navigate(action)
             }
         }
         viewModel.getAllTasks().observe(viewLifecycleOwner, Observer {
@@ -99,5 +104,10 @@ class TasksFragment: Fragment(R.layout.fragment_tasks) {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onItemClick(task: Task) {
+        val action = TasksFragmentDirections.actionTaskFragmentToAddEditTaskFragment(task)
+        findNavController().navigate(action)
     }
 }

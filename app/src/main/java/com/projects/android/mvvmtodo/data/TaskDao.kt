@@ -20,7 +20,7 @@ interface TaskDao {
     @Query ("SELECT * from table_task order by important desc, name")
     fun getTasksSortedByName(): Flow<List<Task>>
 
-    @Query("SELECT * from table_task order by important desc, name")
+    @Query("SELECT * from table_task order by important desc, dateCreated desc")
     fun getTasksSortedByDate(): Flow<List<Task>>
 
     @Query("DELETE FROM table_task WHERE completed=1")
