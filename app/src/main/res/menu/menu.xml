@@ -18,7 +18,7 @@
         <menu>
             <item
                 android:id="@+id/action_sort_by_date"
-                android:title="Sort By Data Created"
+                android:title="Sort By Date Created"
                 app:showAsAction="never"/>
 
             <item

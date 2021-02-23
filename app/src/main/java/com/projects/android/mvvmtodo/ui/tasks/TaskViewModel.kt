@@ -4,6 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.projects.android.mvvmtodo.data.Task
 import com.projects.android.mvvmtodo.data.TaskDao
 import kotlinx.coroutines.launch
 
@@ -17,5 +18,9 @@ class TaskViewModel @ViewModelInject constructor(private val taskDao: TaskDao): 
 
     fun deleteCompletedTasks() = viewModelScope.launch {
         taskDao.deleteCompletedTasks()
+    }
+
+    fun update(task: Task) = viewModelScope.launch {
+        taskDao.update(task)
     }
 }

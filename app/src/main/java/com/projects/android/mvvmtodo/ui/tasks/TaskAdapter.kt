@@ -23,6 +23,7 @@ class TaskAdapter(private val listener: OnItemClickListener) : ListAdapter<Task,
 
     interface OnItemClickListener {
         fun onItemClick(task: Task)
+        fun onCheckBoxClicked(task: Task, isChecked: Boolean)
     }
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -33,6 +34,14 @@ class TaskAdapter(private val listener: OnItemClickListener) : ListAdapter<Task,
                     if (position != RecyclerView.NO_POSITION) {
                         val task = getItem(position)
                         listener.onItemClick(task)
+                    }
+                }
+
+                checkBoxCompleted.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onCheckBoxClicked(task, checkBoxCompleted.isChecked)
                     }
                 }
             }

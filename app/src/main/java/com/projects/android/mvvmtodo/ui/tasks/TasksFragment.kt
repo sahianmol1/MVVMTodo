@@ -110,4 +110,8 @@ class TasksFragment: Fragment(R.layout.fragment_tasks), TaskAdapter.OnItemClickL
         val action = TasksFragmentDirections.actionTaskFragmentToAddEditTaskFragment(task)
         findNavController().navigate(action)
     }
+
+    override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
+        viewModel.update(task.copy(completed = isChecked))
+    }
 }
