@@ -22,7 +22,6 @@ abstract class TaskDatabase: RoomDatabase() {
             CoroutineScope(SupervisorJob()).launch {
                 dao.insert(Task("Call Elon Musk", true, false))
                 dao.insert(Task("Call Mom", true, false))
-                dao.insert(Task("Call Rhythm", false, false))
                 dao.insert(Task("Watch Movie", false, false))
                 dao.insert(Task("Play Cricket", false, false))
                 dao.insert(Task("Do Coding", true, true))

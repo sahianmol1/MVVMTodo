@@ -14,14 +14,11 @@ interface TaskDao {
     @Delete
     suspend fun delete(task: Task)
 
-    @Query("SELECT * from table_task WHERE name LIKE '%' || :searchQuery || '%' order by important desc")
-    fun getAllTasks(searchQuery: String): Flow<List<Task>>
+    @Query ("SELECT * from table_task WHERE name LIKE '%' || :searchQuery || '%'  order by important desc, name")
+    fun getTasksSortedByName(searchQuery: String): Flow<List<Task>>
 
-    @Query ("SELECT * from table_task order by important desc, name")
-    fun getTasksSortedByName(): Flow<List<Task>>
-
-    @Query("SELECT * from table_task order by important desc, dateCreated desc")
-    fun getTasksSortedByDate(): Flow<List<Task>>
+    @Query("SELECT * from table_task WHERE name LIKE '%' || :searchQuery || '%'  order by important desc, dateCreated desc")
+    fun getTasksSortedByDate(searchQuery: String): Flow<List<Task>>
 
     @Query("DELETE FROM table_task WHERE completed=1")
     suspend fun deleteCompletedTasks()
